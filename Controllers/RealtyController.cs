@@ -6,36 +6,37 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Honeymustard.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class RealtyController : Controller
     {
-        // GET api/values
+        // GET api/realty
         [HttpGet]
         public IEnumerable<string> Get()
         {
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/values/5
+        // GET api/realty/5
         [HttpGet("{id}")]
         public string Get(int id)
         {
             return "value";
         }
 
-        // POST api/values
+        // POST api/realty
         [HttpPost]
         public void Post([FromBody]string value)
         {
         }
 
-        // PUT api/values/5
+        // PUT api/realty/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody]string value)
         {
         }
 
-        // DELETE api/values/5
+        // DELETE api/realty/5
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
