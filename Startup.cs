@@ -23,6 +23,7 @@ namespace Honeymustard
         // This method gets called by the runtime.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<IPathService, PathService>();
             services.AddMvc();
         }
 
