@@ -2,6 +2,7 @@
 *.swo
 *.swn
 *.swm
+.vscode/
 obj/
 bin/
 ~
