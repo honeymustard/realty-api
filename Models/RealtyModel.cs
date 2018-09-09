@@ -1,3 +1,5 @@
+using System;
+
 namespace Honeymustard
 {
     public class RealtyModel
@@ -10,5 +12,6 @@ namespace Honeymustard
         public int Price { get; set; }
         public int SharedDept { get; set; }
         public int SharedExpenses { get; set; }
+        public DateTime Added { get; set; }
     }
 }
