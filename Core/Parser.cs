@@ -10,7 +10,6 @@ namespace Honeymustard
 
     public class Parser
     {
-
         public string Blob { get; private set; }
 
         public Parser(string blob)
