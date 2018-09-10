@@ -9,7 +9,7 @@ namespace Honeymustard
         {
             Match match = null;
             match = Regex.Match(chunk, @"data-finnkode=\""(\d+)\""");
-            var id = match.Groups[1].Value;
+            var realtyId = match.Groups[1].Value;
 
             match = Regex.Match(chunk, @"<img src=\""(.*?)\""");
             var imageUri = match.Groups[1].Value;
@@ -33,7 +33,7 @@ namespace Honeymustard
             var sharedExpenses = match.Groups[1].Value.Replace(" ", "");
 
             return new RealtyModel {
-                ID = id,
+                RealtyId = realtyId,
                 ImageUri = imageUri,
                 Address = address,
                 Description = description,
