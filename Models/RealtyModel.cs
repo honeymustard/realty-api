@@ -4,7 +4,7 @@ namespace Honeymustard
 {
     public class RealtyModel
     {
-        public string ID { get; set; }
+        public string RealtyId { get; set; }
         public string ImageUri { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
