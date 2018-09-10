@@ -12,10 +12,12 @@ namespace Honeymustard
     public class TestController : Controller
     {
         protected IPathService Paths;
+        protected RealtyRepository Repository;
 
-        public TestController(IPathService paths)
+        public TestController(IPathService paths, RealtyRepository repository)
         {
             Paths = paths;
+            Repository = repository;
         }
 
         // GET api/test/fetch
@@ -44,9 +46,10 @@ namespace Honeymustard
             var indices = parser.FindIndices(container);
             var partitions = parser.Partition(indices);
             var chunks = parser.Chunk(partitions);
-            var models = chunks.Select(e => new RealtyParser().Parse(e)).ToList();
+            var models = chunks.Select(e => new RealtyParser().Parse(e));
+            var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
 
-            return Json(models);
+            return Json(documents);
         }
     }
 }
