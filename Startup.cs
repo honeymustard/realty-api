@@ -8,28 +8,45 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using AutoMapper;
 
 namespace Honeymustard
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-        {
-            Configuration = configuration;
-        }
-
         public IConfiguration Configuration { get; }
+
+        public Startup(IHostingEnvironment env)
+        {
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json",
+                    optional: false,
+                    reloadOnChange: true)
+                .AddJsonFile("secrets.json",
+                    optional: false,
+                    reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+        }
 
         // This method gets called by the runtime.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddScoped<IPathService, PathService>();
+            var credentials = Configuration.GetSection("MongoDB").Get<Credentials>();
+
+            services.AddSingleton<ICredentials>(credentials);
+            services.AddSingleton<IDatabase, Database>();
+            services.AddSingleton<RealtyRepository, RealtyRepository>();
+            services.AddSingleton<IPathService, PathService>();
             services.AddMvc();
         }
 
         // This method gets called by the runtime.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            Mapper.Initialize(config => config.CreateMap<RealtyModel, RealtyDocument>());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
