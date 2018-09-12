@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using MongoDB.Driver;
 using MongoDB.Bson;
@@ -7,6 +8,10 @@ namespace Honeymustard
     public class RealtyRepository
     {
         protected IMongoDatabase Db { get; set; }
+
+        public static FilterDefinition<RealtyDocument> FilterToday {
+            get => Builders<RealtyDocument>.Filter.Gte("Added", DateTime.Now.Date);
+        }
 
         public RealtyRepository(IDatabase database)
         {
@@ -23,9 +28,15 @@ namespace Honeymustard
             Db.GetCollection<RealtyDocument>("realties").InsertOne(document);
         }
 
-        public void InsertMany(IEnumerable<RealtyDocument> document)
+        public IEnumerable<RealtyDocument> InsertMany(IEnumerable<RealtyDocument> documents)
         {
-            Db.GetCollection<RealtyDocument>("realties").InsertMany(document);
+            Db.GetCollection<RealtyDocument>("realties").InsertMany(documents);
+            return documents;
+        }
+
+        public IEnumerable<RealtyDocument> FindAny(FilterDefinition<RealtyDocument> filter)
+        {
+            return Db.GetCollection<RealtyDocument>("realties").Find(filter).ToList();
         }
     }
 }
