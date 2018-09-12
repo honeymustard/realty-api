@@ -8,31 +8,31 @@ namespace Honeymustard
     {
         public ObjectId Id { get; set; }
 
-        [BsonElement("RealtyId")]
+        [BsonElement]
         public string RealtyId { get; set; }
 
-        [BsonElement("ImageUri")]
+        [BsonElement]
         public string ImageUri { get; set; }
 
-        [BsonElement("Address")]
+        [BsonElement]
         public string Address { get; set; }
 
-        [BsonElement("Description")]
+        [BsonElement]
         public string Description { get; set; }
 
-        [BsonElement("SquareMeters")]
+        [BsonElement]
         public int SquareMeters { get; set; }
 
-        [BsonElement("Price")]
+        [BsonElement]
         public int Price { get; set; }
 
-        [BsonElement("SharedDept")]
+        [BsonElement]
         public int SharedDept { get; set; }
 
-        [BsonElement("SharedExpenses")]
+        [BsonElement]
         public int SharedExpenses { get; set; }
 
-        [BsonElement("Added")]
+        [BsonElement]
         public DateTime Added { get; set; }
     }
 }
