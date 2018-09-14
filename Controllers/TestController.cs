@@ -50,10 +50,13 @@ namespace Honeymustard
             var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
 
             var todays = Repository.FindAny(RealtyRepository.FilterToday);
-            var realties = documents.Where(e => !todays.Any(item => item.Id == e.Id));
+            var realties = documents.Where(e => !todays.Any(item => item.RealtyId == e.RealtyId));
 
-            //Repository.InsertMany(realties);
-            return Json(realties);
+            return Json(new {
+                results = documents.Count(),
+                inserted = realties.Count(),
+                ignored = todays.Count(),
+            });
         }
     }
 }
