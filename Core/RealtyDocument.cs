@@ -6,7 +6,8 @@ namespace Honeymustard
 {
     public class RealtyDocument
     {
-        public ObjectId Id { get; set; }
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
 
         [BsonElement]
         public string RealtyId { get; set; }
