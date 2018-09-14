@@ -49,7 +49,11 @@ namespace Honeymustard
             var models = chunks.Select(e => new RealtyParser().Parse(e));
             var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
 
-            return Json(documents);
+            var todays = Repository.FindAny(RealtyRepository.FilterToday);
+            var realties = documents.Where(e => !todays.Any(item => item.Id == e.Id));
+
+            //Repository.InsertMany(realties);
+            return Json(realties);
         }
     }
 }
