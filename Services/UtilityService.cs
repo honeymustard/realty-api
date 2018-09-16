@@ -2,14 +2,14 @@ using System.IO;
 
 namespace Honeymustard
 {
-    public static class Utils
+    public class UtilityService : IUtilityService
     {
-        public static string ReadFile(string path, string file)
+        public string ReadFile(string path, string file)
         {
             return File.ReadAllText(Path.Combine(path, file));
         }
 
-        public static string ReadFile(string path)
+        public string ReadFile(string path)
         {
             return File.ReadAllText(path);
         }

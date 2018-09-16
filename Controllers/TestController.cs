@@ -12,11 +12,13 @@ namespace Honeymustard
     public class TestController : Controller
     {
         protected IPathService Paths;
+        protected IUtilityService Utilities;
         protected RealtyRepository Repository;
 
-        public TestController(IPathService paths, RealtyRepository repository)
+        public TestController(IPathService paths, IUtilityService utilities, RealtyRepository repository)
         {
             Paths = paths;
+            Utilities = utilities;
             Repository = repository;
         }
 
@@ -31,15 +33,14 @@ namespace Honeymustard
         [HttpGet("show/{name}")]
         public string Show(string name)
         {
-            return Utils.ReadFile(Paths.GetDataPath(), $"{name}.html");
+            return Utilities.ReadFile(Paths.GetDataPath(), $"{name}.html");
         }
 
         // GET api/test/parse/today
         [HttpGet("parse/today")]
         public IActionResult Parse()
         {
-            var file = Utils.ReadFile(Paths.GetDataPath(), "today.html");
-
+            var file = Utilities.ReadFile(Paths.GetDataPath(), "today.html");
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
 
             var parser = new Parser(file);
