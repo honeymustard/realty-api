@@ -20,7 +20,7 @@ namespace Honeymustard
 
         public IEnumerable<RealtyDocument> GetAll()
         {
-            return Db.GetCollection<RealtyDocument>("realties").Find(new BsonDocument()).ToList();
+            return Db.GetCollection<RealtyDocument>("realties").Find(new BsonDocument()).ToEnumerable();
         }
 
         public void InsertOne(RealtyDocument document)
@@ -36,7 +36,7 @@ namespace Honeymustard
 
         public IEnumerable<RealtyDocument> FindAny(FilterDefinition<RealtyDocument> filter)
         {
-            return Db.GetCollection<RealtyDocument>("realties").Find(filter).ToList();
+            return Db.GetCollection<RealtyDocument>("realties").Find(filter).ToEnumerable();
         }
     }
 }
