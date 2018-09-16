@@ -11,9 +11,9 @@ namespace Honeymustard.Controllers
     public class RealtyController : Controller
     {
         protected IHTTPService HTTP;
-        protected RealtyRepository Repository;
+        protected IRepository<RealtyDocument> Repository;
 
-        public RealtyController(IHTTPService http, RealtyRepository repository)
+        public RealtyController(IHTTPService http, IRepository<RealtyDocument> repository)
         {
             HTTP = http;
             Repository = repository;

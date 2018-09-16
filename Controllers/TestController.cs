@@ -14,13 +14,13 @@ namespace Honeymustard
         protected IPathService Paths;
         protected IUtilityService Utilities;
         protected IHTTPService HTTP;
-        protected RealtyRepository Repository;
+        protected IRepository<RealtyDocument> Repository;
 
         public TestController(
             IPathService paths,
             IUtilityService utilities,
             IHTTPService http,
-            RealtyRepository repository)
+            IRepository<RealtyDocument> repository)
         {
             Paths = paths;
             Utilities = utilities;
