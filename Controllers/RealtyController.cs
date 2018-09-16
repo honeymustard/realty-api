@@ -10,10 +10,12 @@ namespace Honeymustard.Controllers
     [Route("api/[controller]")]
     public class RealtyController : Controller
     {
+        protected IHTTPService HTTP;
         protected RealtyRepository Repository;
 
-        public RealtyController(RealtyRepository repository)
+        public RealtyController(IHTTPService http, RealtyRepository repository)
         {
+            HTTP = http;
             Repository = repository;
         }
 
@@ -44,31 +46,6 @@ namespace Honeymustard.Controllers
                 inserted = realties.Count(),
                 ignored = todays.Count(),
             });
-        }
-
-        // GET api/realty/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/realty
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/realty/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/realty/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

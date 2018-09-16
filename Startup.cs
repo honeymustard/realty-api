@@ -40,6 +40,7 @@ namespace Honeymustard
             services.AddSingleton<RealtyRepository, RealtyRepository>();
             services.AddSingleton<IPathService, PathService>();
             services.AddSingleton<IUtilityService, UtilityService>();
+            services.AddSingleton<IHTTPService, HTTPService>();
             services.AddMvc();
         }
 

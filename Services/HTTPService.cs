@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Honeymustard
 {
-    public static class HTTP
+    public class HTTPService : IHTTPService
     {
         public static string UserAgent {
             get => string.Join(" ", new String[] {
@@ -15,7 +15,7 @@ namespace Honeymustard
             });
         }
 
-        public static string Fetch(Uri uri)
+        public string Fetch(Uri uri)
         {
             using (var client = new WebClient { Encoding = Encoding.UTF8 })
             {
