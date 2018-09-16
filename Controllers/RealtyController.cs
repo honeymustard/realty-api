@@ -10,11 +10,40 @@ namespace Honeymustard.Controllers
     [Route("api/[controller]")]
     public class RealtyController : Controller
     {
-        // GET api/realty
-        [HttpGet]
-        public IEnumerable<string> Get()
+        protected RealtyRepository Repository;
+
+        public RealtyController(RealtyRepository repository)
         {
-            return new string[] { "value1", "value2" };
+            Repository = repository;
+        }
+
+        // GET api/realty/parse/today
+        [HttpGet("parse/today")]
+        public IActionResult Today()
+        {
+            var uri = new Uri("https://www.finn.no/realestate/homes/search.html?location=0.20061&published=1&rows=9999");
+            var container = "<div class=\"unit flex align-items-stretch result-item\">";
+
+            var parser = new Parser(HTTP.Fetch(uri));
+            var indices = parser.FindIndices(container);
+            var partitions = parser.Partition(indices);
+            var chunks = parser.Chunk(partitions);
+            var models = chunks.Select(e => new RealtyParser().Parse(e));
+            var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
+
+            var todays = Repository.FindAny(RealtyRepository.FilterToday);
+            var realties = documents.Where(e => !todays.Any(item => item.RealtyId == e.RealtyId));
+
+            if (realties.Count() > 0)
+            {
+                Repository.InsertMany(realties);
+            }
+
+            return Json(new {
+                results = documents.Count(),
+                inserted = realties.Count(),
+                ignored = todays.Count(),
+            });
         }
 
         // GET api/realty/5
