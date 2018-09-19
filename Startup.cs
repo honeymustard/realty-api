@@ -72,6 +72,12 @@ namespace Honeymustard
         {
             Mapper.Initialize(config => config.CreateMap<RealtyModel, RealtyDocument>());
 
+            app.UseCors(policy => policy
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials());
+
             app.UseAuthentication();
             app.UseMvc();
         }
