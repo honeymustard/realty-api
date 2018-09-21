@@ -7,9 +7,14 @@ namespace Honeymustard
     public class UserDocument
     {
         [BsonRepresentation(BsonType.ObjectId)]
-        public string ID { get; set; }
+        public string Id { get; set; }
 
-        [BsonElement]
+        [BsonRequired]
+        [BsonElement("username")]
         public string Username { get; set; }
+
+        [BsonRequired]
+        [BsonElement("password")]
+        public string Password { get; set; }
     }
 }
