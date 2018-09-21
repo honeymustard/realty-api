@@ -9,31 +9,31 @@ namespace Honeymustard
         [BsonRepresentation(BsonType.ObjectId)]
         public string Id { get; set; }
 
-        [BsonElement]
+        [BsonElement("realtyId")]
         public string RealtyId { get; set; }
 
-        [BsonElement]
+        [BsonElement("imageUri")]
         public string ImageUri { get; set; }
 
-        [BsonElement]
+        [BsonElement("address")]
         public string Address { get; set; }
 
-        [BsonElement]
+        [BsonElement("description")]
         public string Description { get; set; }
 
-        [BsonElement]
+        [BsonElement("squareMeters")]
         public int SquareMeters { get; set; }
 
-        [BsonElement]
+        [BsonElement("price")]
         public int Price { get; set; }
 
-        [BsonElement]
+        [BsonElement("sharedDept")]
         public int SharedDept { get; set; }
 
-        [BsonElement]
+        [BsonElement("sharedExpenses")]
         public int SharedExpenses { get; set; }
 
-        [BsonElement]
+        [BsonElement("added")]
         public DateTime Added { get; set; }
     }
 }
