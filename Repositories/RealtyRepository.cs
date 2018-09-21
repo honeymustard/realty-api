@@ -8,6 +8,7 @@ namespace Honeymustard
     public class RealtyRepository : IRepository<RealtyDocument>
     {
         protected IMongoDatabase Db { get; set; }
+        protected IMongoCollection<RealtyDocument> Collection { get; set; }
 
         public static FilterDefinition<RealtyDocument> FilterToday {
             get => Builders<RealtyDocument>.Filter.Gte("Added", DateTime.Now.Date);
@@ -16,27 +17,28 @@ namespace Honeymustard
         public RealtyRepository(IDatabase database)
         {
             Db = database.GetDatabase();
+            Collection = Db.GetCollection<RealtyDocument>("realties");
         }
 
         public IEnumerable<RealtyDocument> GetAll()
         {
-            return Db.GetCollection<RealtyDocument>("realties").Find(new BsonDocument()).ToEnumerable();
+            return Collection.Find(new BsonDocument()).ToEnumerable();
         }
 
         public void InsertOne(RealtyDocument document)
         {
-            Db.GetCollection<RealtyDocument>("realties").InsertOne(document);
+            Collection.InsertOne(document);
         }
 
         public IEnumerable<RealtyDocument> InsertMany(IEnumerable<RealtyDocument> documents)
         {
-            Db.GetCollection<RealtyDocument>("realties").InsertMany(documents);
+            Collection.InsertMany(documents);
             return documents;
         }
 
         public IEnumerable<RealtyDocument> FindAny(FilterDefinition<RealtyDocument> filter)
         {
-            return Db.GetCollection<RealtyDocument>("realties").Find(filter).ToEnumerable();
+            return Collection.Find(filter).ToEnumerable();
         }
     }
 }
