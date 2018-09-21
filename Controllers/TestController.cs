@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Honeymustard
 {
@@ -26,6 +27,19 @@ namespace Honeymustard
             Utilities = utilities;
             HTTP = http;
             Repository = repository;
+        }
+
+        [Authorize]
+        [HttpGet("secrets")]
+        public IActionResult Secrets()
+        {
+            return Json(new { secrets = "yes" });
+        }
+
+        [HttpGet("non-secrets")]
+        public IActionResult NonSecrets()
+        {
+            return Json(new { secrets = "nope" });
         }
 
         // GET api/test/fetch
