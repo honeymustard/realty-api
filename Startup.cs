@@ -36,16 +36,13 @@ namespace Honeymustard
         // This method gets called by the runtime.
         public void ConfigureServices(IServiceCollection services)
         {
-            var credentials = Configuration
-                .GetSection("MongoDB")
-                .Get<Credentials>();
+            var tokens = Configuration.GetSection("Tokens").Get<Tokens>();
+            var userDB = new Database(Configuration.GetSection("UserDB").Get<Credentials>());
+            var realtyDB = new Database(Configuration.GetSection("RealtyDB").Get<Credentials>());
 
-            var key = Configuration
-                .GetValue<string>("Authentication:Secret");
-
-            services.AddSingleton<ICredentials>(credentials);
-            services.AddSingleton<IDatabase, Database>();
-            services.AddSingleton<IRepository<RealtyDocument>, RealtyRepository>();
+            services.AddSingleton<Tokens>(tokens);
+            services.AddSingleton<IRepository<UserDocument>>(new UserRepository(userDB));
+            services.AddSingleton<IRepository<RealtyDocument>>(new RealtyRepository(realtyDB));
             services.AddSingleton<IPathService, PathService>();
             services.AddSingleton<IUtilityService, UtilityService>();
             services.AddSingleton<IHTTPService, HTTPService>();
@@ -58,9 +55,11 @@ namespace Honeymustard
                 options.TokenValidationParameters = new TokenValidationParameters()
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                    ValidateLifetime = true,
                     ValidateIssuer = true,
                     ValidateAudience = false,
+                    ValidIssuer = tokens.Issuer,
+                    IssuerSigningKey = tokens.SigningKey,
                 };
             });
 
@@ -70,7 +69,11 @@ namespace Honeymustard
         // This method gets called by the runtime.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            Mapper.Initialize(config => config.CreateMap<RealtyModel, RealtyDocument>());
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<UserModel, UserDocument>();
+                config.CreateMap<RealtyModel, RealtyDocument>();
+            });
 
             app.UseCors(policy => policy
                 .AllowAnyOrigin()
