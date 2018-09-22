@@ -1,6 +1,7 @@
 using System;
 using System.Text;
 using System.Security;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Honeymustard
@@ -19,6 +20,20 @@ namespace Honeymustard
         public SigningCredentials SigningCredentials
         {
             get => new SigningCredentials(SigningKey, SecurityAlgorithms.HmacSha256);
+        }
+
+        public string Token
+        {
+            get => new JwtSecurityTokenHandler().WriteToken(GenerateToken());
+        }
+
+        public JwtSecurityToken GenerateToken()
+        {
+            return new JwtSecurityToken(
+                issuer: Issuer,
+                expires: Expires,
+                signingCredentials: SigningCredentials
+            );
         }
     }
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Text;
 using System.Linq;
-using System.IdentityModel.Tokens.Jwt;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
@@ -39,15 +38,9 @@ namespace Honeymustard
 
             if (matches.Count() == 1)
             {
-                var token = new JwtSecurityToken(
-                    issuer: Tokens.Issuer,
-                    expires: Tokens.Expires,
-                    signingCredentials: Tokens.SigningCredentials
-                );
-
                 return Ok(new
                 {
-                    token = new JwtSecurityTokenHandler().WriteToken(token)
+                    token = Tokens.Token
                 });
             }
 
