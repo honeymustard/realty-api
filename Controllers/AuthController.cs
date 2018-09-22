@@ -15,11 +15,13 @@ namespace Honeymustard
     {
         protected IRepository<UserDocument> Repository;
         protected Tokens Tokens;
+        protected Secrets Secrets;
 
-        public AuthController(IRepository<UserDocument> repository, Tokens tokens)
+        public AuthController(IRepository<UserDocument> repository, Tokens tokens, Secrets secrets)
         {
             Repository = repository;
             Tokens = tokens;
+            Secrets = secrets;
         }
 
         [AllowAnonymous]
@@ -31,6 +33,8 @@ namespace Honeymustard
             }
 
             var document = AutoMapper.Mapper.Map<UserDocument>(user);
+            document.Password = Hashing.GenerateHash(document.Password, Secrets.Salt);
+
             var matches = Repository.FindAny(UserRepository.FilterMatch(document));
 
             if (matches.Count() == 1)
