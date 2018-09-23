@@ -1,6 +1,6 @@
 namespace Honeymustard
 {
-    public interface IPathService
+    public interface IEnvironment
     {
         string GetDataPath();
     }

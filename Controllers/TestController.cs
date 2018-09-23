@@ -12,20 +12,20 @@ namespace Honeymustard
     [Route("api/[controller]")]
     public class TestController : Controller
     {
-        protected IPathService Paths;
-        protected IUtilityService Utilities;
-        protected IHTTPService HTTP;
+        protected IEnvironment Environment;
+        protected IUtilities Utilities;
+        protected IBrowser Browser;
         protected IRepository<RealtyDocument> Repository;
 
         public TestController(
-            IPathService paths,
-            IUtilityService utilities,
-            IHTTPService http,
+            IEnvironment environment,
+            IUtilities utilities,
+            IBrowser browser,
             IRepository<RealtyDocument> repository)
         {
-            Paths = paths;
+            Environment = environment;
             Utilities = utilities;
-            HTTP = http;
+            Browser = browser;
             Repository = repository;
         }
 
@@ -33,34 +33,31 @@ namespace Honeymustard
         [HttpGet("secrets")]
         public IActionResult Secrets()
         {
-            return Json(new { secrets = "yes" });
+            return Ok(new { secrets = "yes" });
         }
 
         [HttpGet("non-secrets")]
         public IActionResult NonSecrets()
         {
-            return Json(new { secrets = "nope" });
+            return Ok(new { secrets = "nope" });
         }
 
-        // GET api/test/fetch
         [HttpGet("fetch")]
         public string Fetch()
         {
-            return HTTP.Fetch(new Uri("https://www.nrk.no"));
+            return Browser.Fetch(new Uri("https://honeymustard.io"));
         }
 
-        // GET api/test/show
         [HttpGet("show/{name}")]
         public string Show(string name)
         {
-            return Utilities.ReadFile(Paths.GetDataPath(), $"{name}.html");
+            return Utilities.ReadFile(Environment.GetDataPath(), $"{name}.html");
         }
 
-        // GET api/test/parse/today
         [HttpGet("parse/today")]
         public IActionResult Parse()
         {
-            var file = Utilities.ReadFile(Paths.GetDataPath(), "today.html");
+            var file = Utilities.ReadFile(Environment.GetDataPath(), "today.html");
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
 
             var parser = new Parser(file);

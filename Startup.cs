@@ -45,9 +45,9 @@ namespace Honeymustard
             services.AddSingleton<Tokens>(tokens);
             services.AddSingleton<IRepository<UserDocument>>(new UserRepository(userDB));
             services.AddSingleton<IRepository<RealtyDocument>>(new RealtyRepository(realtyDB));
-            services.AddSingleton<IPathService, PathService>();
-            services.AddSingleton<IUtilityService, UtilityService>();
-            services.AddSingleton<IHTTPService, HTTPService>();
+            services.AddSingleton<IEnvironment, Environment>();
+            services.AddSingleton<IUtilities, Utilitis>();
+            services.AddSingleton<IBrowser, Browser>();
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

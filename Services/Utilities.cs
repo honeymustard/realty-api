@@ -2,7 +2,7 @@ using System.IO;
 
 namespace Honeymustard
 {
-    public class UtilityService : IUtilityService
+    public class Utilitis : IUtilities
     {
         public string ReadFile(string path, string file)
         {

@@ -1,6 +1,6 @@
 namespace Honeymustard
 {
-    public interface IUtilityService
+    public interface IUtilities
     {
         string ReadFile(string path, string file);
         string ReadFile(string path);

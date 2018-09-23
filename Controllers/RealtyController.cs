@@ -10,12 +10,12 @@ namespace Honeymustard.Controllers
     [Route("api/[controller]")]
     public class RealtyController : Controller
     {
-        protected IHTTPService HTTP;
+        protected IBrowser Browser;
         protected IRepository<RealtyDocument> Repository;
 
-        public RealtyController(IHTTPService http, IRepository<RealtyDocument> repository)
+        public RealtyController(IBrowser browser, IRepository<RealtyDocument> repository)
         {
-            HTTP = http;
+            Browser = browser;
             Repository = repository;
         }
 
@@ -26,7 +26,7 @@ namespace Honeymustard.Controllers
             var uri = new Uri("https://www.finn.no/realestate/homes/search.html?location=0.20061&published=1&rows=9999");
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
 
-            var parser = new Parser(HTTP.Fetch(uri));
+            var parser = new Parser(Browser.Fetch(uri));
             var indices = parser.FindIndices(container);
             var partitions = parser.Partition(indices);
             var chunks = parser.Chunk(partitions);

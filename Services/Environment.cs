@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Hosting;
 
 namespace Honeymustard
 {
-    public class PathService : IPathService
+    public class Environment : IEnvironment
     {
         protected IHostingEnvironment Env;
 
-        public PathService(IHostingEnvironment env)
+        public Environment(IHostingEnvironment env)
         {
             Env = env;
         }

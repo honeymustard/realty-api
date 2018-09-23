@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Honeymustard
 {
-    public class HTTPService : IHTTPService
+    public class Browser : IBrowser
     {
         public static string UserAgent {
             get => string.Join(" ", new String[] {
