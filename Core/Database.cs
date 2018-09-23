@@ -4,7 +4,7 @@ using MongoDB.Driver.Builders;
 
 namespace Honeymustard
 {
-    public class Database : IDatabase
+    public class Database : IDatabase<IMongoDatabase>
     {
         protected MongoClient Client;
         protected IMongoDatabase Db;

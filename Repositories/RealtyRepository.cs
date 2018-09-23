@@ -14,7 +14,7 @@ namespace Honeymustard
             get => Builders<RealtyDocument>.Filter.Gte("Added", DateTime.Now.Date);
         }
 
-        public RealtyRepository(IDatabase database)
+        public RealtyRepository(IDatabase<IMongoDatabase> database)
         {
             Db = database.GetDatabase();
             Collection = Db.GetCollection<RealtyDocument>("realties");
