@@ -83,6 +83,7 @@ namespace Honeymustard
                 .AllowAnyHeader()
                 .AllowCredentials());
 
+            app.UseStatusCodePages("text/plain", "status: {0}");
             app.UseAuthentication();
             app.UseMvc();
         }
