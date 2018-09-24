@@ -10,7 +10,7 @@ namespace Honeymustard
     {
         public string Issuer { get; set; }
         public string Secret { get; set; }
-        public DateTime Expires = DateTime.Now.AddMinutes(30);
+        public DateTime Expires = DateTime.UtcNow.AddMinutes(30);
 
         public SymmetricSecurityKey SigningKey
         {
