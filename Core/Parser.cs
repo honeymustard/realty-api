@@ -17,14 +17,18 @@ namespace Honeymustard
             Blob = blob;
         }
 
-        public List<int> FindIndices(string key)
+        /// <summary>
+        /// Finds all the start indices of a given string.
+        /// </summary>
+        /// <param name="needle">The string to look for</param>
+        public List<int> FindIndices(string needle)
         {
             var indices = new List<int>();
             var offset = 0;
 
             while (true)
             {
-                var index = Blob.IndexOf(key, offset);
+                var index = Blob.IndexOf(needle, offset);
 
                 if (index == -1)
                 {
@@ -32,12 +36,16 @@ namespace Honeymustard
                 }
 
                 indices.Add(index);
-                offset = index + key.Length;
+                offset = index + needle.Length;
             }
 
             return indices;
         }
 
+        /// <summary>
+        /// Creates a list of (start, length) partitions from a list of indices.
+        /// </summary>
+        /// <param name="indices">A list of valid indices</param>
         public List<Partition> Partition(List<int> indices)
         {
             var partitions = new List<Partition>();
@@ -55,6 +63,10 @@ namespace Honeymustard
             return partitions;
         }
 
+        /// <summary>
+        /// Creates a list of text chunks from a list of partitions.
+        /// </summary>
+        /// <param name="partitions">A list of valid partitions</param>
         public List<string> Chunk(List<Partition> partitions)
         {
             var chunks = new List<string>();
