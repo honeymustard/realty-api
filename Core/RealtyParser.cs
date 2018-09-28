@@ -11,26 +11,26 @@ namespace Honeymustard
             match = Regex.Match(chunk, @"data-finnkode=\""(\d+)\""");
             var realtyId = match.Groups[1].Value;
 
-            match = Regex.Match(chunk, @"<img src=\""(.*?)\""");
+            match = Regex.Match(chunk, @"<img src=\""(.{0,300}?)\""");
             var imageUri = match.Groups[1].Value;
 
-            match = Regex.Match(chunk, @"data-automation-id=\""\w*?\"">(.*?)</div>");
+            match = Regex.Match(chunk, @"data-automation-id=\""\w*?\"">(.{0,500}?)</div>");
             var address = match.Groups[1].Value;
 
             match = Regex.Match(chunk, @"<h3 .*?>(.*)</h3>");
             var description = match.Groups[1].Value;
 
-            match = Regex.Match(chunk, @"<span .*?>([0-9]{1,5}).*?</span>");
-            var squareMeters = match.Groups[1].Value;
+            match = Regex.Match(chunk, @"<span .*?>([^-]{1,12}?).?m.?</span>");
+            var squareMeters = match.Groups[1].Value.Replace(@"\s+", "").Replace("\u00A0", String.Empty);
 
-            match = Regex.Match(chunk, @"<span .*?>([0-9 ]{3,20}),-</span>");
-            var price = match.Groups[1].Value.Replace(" ", "");
+            match = Regex.Match(chunk, @"<span .*?>(.{3,16}?),-</span>");
+            var price = match.Groups[1].Value.Replace(@"\s+", "").Replace("\u00A0", String.Empty);
 
-            match = Regex.Match(chunk, @"Fellesgjeld: ([0-9 ]{3,15}),-");
-            var sharedDept = match.Groups[1].Value.Replace(" ", "");
+            match = Regex.Match(chunk, @"Fellesgjeld: (.{3,16}?),-");
+            var sharedDept = match.Groups[1].Value.Replace(@"\s+", "").Replace("\u00A0", String.Empty);
 
-            match = Regex.Match(chunk, @"Fellesutg\.?: ([0-9 ]{3,15}),-");
-            var sharedExpenses = match.Groups[1].Value.Replace(" ", "");
+            match = Regex.Match(chunk, @"Fellesutg\.?: (.{3,16}?),-");
+            var sharedExpenses = match.Groups[1].Value.Replace(@"\s+", "").Replace("\u00A0", String.Empty);
 
             return new RealtyModel {
                 RealtyId = realtyId,
