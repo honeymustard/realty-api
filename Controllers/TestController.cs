@@ -57,23 +57,31 @@ namespace Honeymustard
         [HttpGet("parse/today")]
         public IActionResult Parse()
         {
-            var file = Utilities.ReadFile(Environment.GetDataPath(), "today.html");
+            var file = Utilities.ReadFile(Environment.GetDataPath(), "today-180927.html");
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
 
-            var parser = new Parser(file);
+            var parser = new Parser(file)
+                .Strip(new Regex(@"<script.*?</script>", RegexOptions.Singleline));
+
             var indices = parser.FindIndices(container);
             var partitions = parser.Partition(indices);
-            var chunks = parser.Chunk(partitions);
+
+            var chunks = parser.Chunk(partitions)
+                .Where(e => !new Regex(@"id=""promoted-[0-9]{3,16}""").Match(e).Success);
+
             var models = chunks.Select(e => new RealtyParser().Parse(e));
             var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
 
             var todays = Repository.FindAny(RealtyRepository.FilterToday);
-            var realties = documents.Where(e => !todays.Any(item => item.RealtyId == e.RealtyId));
+            var newRealties = documents.Where(e => !todays.Any(item => item.RealtyId == e.RealtyId));
+            var duplicates = documents.Where(e => todays.Any(item => item.RealtyId == e.RealtyId));
 
             return Json(new {
-                results = documents.Count(),
-                inserted = realties.Count(),
-                ignored = todays.Count(),
+                total = documents.Count(),
+                newRealties = newRealties.Count(),
+                duplicateRealties = duplicates.Count(),
+                newToday = todays.Count() + newRealties.Count(),
+                documents = documents,
             });
         }
     }
