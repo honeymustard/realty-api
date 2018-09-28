@@ -18,6 +18,21 @@ namespace Honeymustard
         }
 
         /// <summary>
+        /// Strips all text that matches a given regular expression.
+        /// </summary>
+        /// <param name="regex">The regular expression</param>
+        /// <returns>Returns a new Parser object.</returns>
+        public Parser Strip(Regex regex)
+        {
+            foreach (Match match in regex.Matches(Blob))
+            {
+                Blob = Blob.Replace(match.Value, "");
+            }
+
+            return new Parser(Blob);
+        }
+
+        /// <summary>
         /// Finds all the start indices of a given string.
         /// </summary>
         /// <param name="needle">The string to look for</param>
