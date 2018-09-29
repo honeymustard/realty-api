@@ -60,5 +60,31 @@ namespace Honeymustard.Controllers
                 documents = documents,
             });
         }
+
+        [HttpGet("datum")]
+        public IActionResult Datum(DateTime from)
+        {
+            var datum = new Dictionary<string, Datum>();
+            var filter = MongoDB.Driver.Builders<RealtyDocument>.Filter.Gte("Added", from);
+
+            foreach (var item in Repository.FindAny(filter))
+            {
+                var day = item.Added.ToString("yyyy-MM-dd");
+
+                if (datum.ContainsKey(day))
+                {
+                    datum[day].Value++;
+                }
+                else
+                {
+                    datum[day] = new Datum {
+                        Date = DateTime.Parse(day),
+                        Value = 0,
+                    };
+                }
+            }
+
+            return Json(datum.Values);
+        }
     }
 }
