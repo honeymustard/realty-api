@@ -65,6 +65,7 @@ namespace Honeymustard
                 };
             });
 
+            services.AddMemoryCache();
             services.AddMvc();
         }
 

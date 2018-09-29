@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace Honeymustard.Controllers
 {
@@ -12,15 +13,19 @@ namespace Honeymustard.Controllers
     public class RealtyController : Controller
     {
         protected IEnvironment Environment;
+        protected IMemoryCache Cache;
         protected IBrowser Browser;
         protected IRepository<RealtyDocument> Repository;
 
         public RealtyController(
             IEnvironment environment,
+            IMemoryCache cache,
             IBrowser browser,
-            IRepository<RealtyDocument> repository)
+            IRepository<RealtyDocument> repository
+        )
         {
             Environment = environment;
+            Cache = cache;
             Browser = browser;
             Repository = repository;
         }
@@ -64,27 +69,39 @@ namespace Honeymustard.Controllers
         [HttpGet("datum")]
         public IActionResult Datum(DateTime from)
         {
-            var datum = new Dictionary<string, Datum>();
-            var filter = MongoDB.Driver.Builders<RealtyDocument>.Filter.Gte("Added", from);
+            List<Datum> datum;
 
-            foreach (var item in Repository.FindAny(filter))
+            var key = $"realty/datum/{from.ToString("yyyy-MM-dd")}";
+
+            if (!Cache.TryGetValue(key, out datum))
             {
-                var day = item.Added.ToString("yyyy-MM-dd");
+                var map = new Dictionary<string, Datum>();
+                var filter = MongoDB.Driver.Builders<RealtyDocument>.Filter.Gte("Added", from);
 
-                if (datum.ContainsKey(day))
+                foreach (var item in Repository.FindAny(filter))
                 {
-                    datum[day].Value++;
+                    var day = item.Added.ToString("yyyy-MM-dd");
+
+                    if (map.ContainsKey(day))
+                    {
+                        map[day].Value++;
+                    }
+                    else
+                    {
+                        map[day] = new Datum {
+                            Date = DateTime.Parse(day),
+                            Value = 0,
+                        };
+                    }
                 }
-                else
-                {
-                    datum[day] = new Datum {
-                        Date = DateTime.Parse(day),
-                        Value = 0,
-                    };
-                }
+
+                datum = map.Values.ToList();
+
+                Cache.Set(key, datum, new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromHours(1)));
             }
 
-            return Json(datum.Values);
+            return Json(datum);
         }
     }
 }
