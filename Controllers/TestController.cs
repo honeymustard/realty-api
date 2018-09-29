@@ -60,7 +60,7 @@ namespace Honeymustard
             var file = Utilities.ReadFile(Environment.GetDataPath(), "today-180927.html");
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
 
-            var parser = new Parser(file)
+            var parser = new TextParser(file)
                 .Strip(new Regex(@"<script.*?</script>", RegexOptions.Singleline));
 
             var indices = parser.FindIndices(container);

@@ -8,28 +8,28 @@ namespace Honeymustard
         public int Length { get; set; }
     }
 
-    public class Parser
+    public class TextParser
     {
-        public string Blob { get; private set; }
+        public string Text { get; private set; }
 
-        public Parser(string blob)
+        public TextParser(string text)
         {
-            Blob = blob;
+            Text = text;
         }
 
         /// <summary>
         /// Strips all text that matches a given regular expression.
         /// </summary>
         /// <param name="regex">The regular expression</param>
-        /// <returns>Returns a new Parser object.</returns>
-        public Parser Strip(Regex regex)
+        /// <returns>Returns a new TextParser object.</returns>
+        public TextParser Strip(Regex regex)
         {
-            foreach (Match match in regex.Matches(Blob))
+            foreach (Match match in regex.Matches(Text))
             {
-                Blob = Blob.Replace(match.Value, "");
+                Text = Text.Replace(match.Value, "");
             }
 
-            return new Parser(Blob);
+            return new TextParser(Text);
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Honeymustard
 
             while (true)
             {
-                var index = Blob.IndexOf(needle, offset);
+                var index = Text.IndexOf(needle, offset);
 
                 if (index == -1)
                 {
@@ -67,7 +67,7 @@ namespace Honeymustard
 
             for (var i = 0; i < indices.Count; i++)
             {
-                var end = i + 1 < indices.Count ? indices[i+1] : Blob.Length;
+                var end = i + 1 < indices.Count ? indices[i+1] : Text.Length;
 
                 partitions.Add(new Partition {
                     Index = indices[i],
@@ -87,7 +87,7 @@ namespace Honeymustard
             var chunks = new List<string>();
 
             partitions.ForEach(partition => {
-                var chunk = Blob.Substring(partition.Index, partition.Length);
+                var chunk = Text.Substring(partition.Index, partition.Length);
                 var regex = new Regex(@"(\r|\n|  )");
                 chunks.Add(regex.Replace(chunk, ""));
             });

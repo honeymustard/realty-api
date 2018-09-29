@@ -32,7 +32,7 @@ namespace Honeymustard.Controllers
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
             var content = Browser.Fetch(uri);
 
-            var parser = new Parser(content)
+            var parser = new TextParser(content)
                 .Strip(new Regex(@"<script.*?</script>", RegexOptions.Singleline));
 
             var indices = parser.FindIndices(container);
