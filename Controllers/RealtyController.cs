@@ -64,7 +64,6 @@ namespace Honeymustard.Controllers
                 newRealties = newRealties.Count(),
                 duplicateRealties = duplicates.Count(),
                 newToday = todays.Count() + newRealties.Count(),
-                documents = documents,
             });
         }
 
