@@ -11,6 +11,8 @@ namespace Honeymustard
     public class TextParser
     {
         public string Text { get; private set; }
+        public static Regex WhiteSpace = new Regex(@"(\r|\n|  )");
+        public static Regex ScriptTags = new Regex(@"<script.*?</script>", RegexOptions.Singleline);
 
         public TextParser(string text)
         {
@@ -87,9 +89,7 @@ namespace Honeymustard
             var chunks = new List<string>();
 
             partitions.ForEach(partition => {
-                var chunk = Text.Substring(partition.Index, partition.Length);
-                var regex = new Regex(@"(\r|\n|  )");
-                chunks.Add(regex.Replace(chunk, ""));
+                chunks.Add(Text.Substring(partition.Index, partition.Length));
             });
 
             return chunks;

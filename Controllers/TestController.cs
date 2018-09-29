@@ -61,7 +61,8 @@ namespace Honeymustard
             var container = "<div class=\"unit flex align-items-stretch result-item\">";
 
             var parser = new TextParser(file)
-                .Strip(new Regex(@"<script.*?</script>", RegexOptions.Singleline));
+                .Strip(TextParser.WhiteSpace)
+                .Strip(TextParser.ScriptTags);
 
             var indices = parser.FindIndices(container);
             var partitions = parser.Partition(indices);

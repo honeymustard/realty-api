@@ -33,7 +33,8 @@ namespace Honeymustard.Controllers
             var content = Browser.Fetch(uri);
 
             var parser = new TextParser(content)
-                .Strip(new Regex(@"<script.*?</script>", RegexOptions.Singleline));
+                .Strip(TextParser.WhiteSpace)
+                .Strip(TextParser.ScriptTags);
 
             var indices = parser.FindIndices(container);
             var partitions = parser.Partition(indices);
