@@ -3,11 +3,6 @@ using System.Text.RegularExpressions;
 
 namespace Honeymustard
 {
-    public class Partition {
-        public int Index { get; set; }
-        public int Length { get; set; }
-    }
-
     public class TextParser
     {
         public string Text { get; private set; }
