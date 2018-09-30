@@ -40,7 +40,7 @@ namespace Honeymustard
         public void ConfigureServices(IServiceCollection services)
         {
             var tokens = Configuration.GetSection("Tokens").Get<Tokens>();
-            var database = new Database(Configuration.GetSection("Database").Get<Credentials>());
+            var database = new Database(Configuration.GetSection("Credentials").Get<Credentials>());
 
             services.AddSingleton<Tokens>(tokens);
             services.AddSingleton<IDatabase<IMongoDatabase>>(database);

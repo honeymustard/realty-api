@@ -23,6 +23,9 @@ namespace Honeymustard
                 .AddJsonFile("appsettings.json",
                     optional: false,
                     reloadOnChange: true)
+                .AddJsonFile("secrets.json",
+                    optional: false,
+                    reloadOnChange: true)
                 .AddInMemoryCollection(variables)
                 .AddEnvironmentVariables("ASPNETCORE_")
                 .AddCommandLine(args)
