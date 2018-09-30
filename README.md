@@ -12,8 +12,8 @@ have a valid user in the users collection.
 A sample of the hidden settings can be found in **secrets.fake.json**.  
 
 ```
-dotnet publish -c Release  # production build
-dotnet watch run           # start development server
+dotnet publish -c Release                 # production build
+dotnet watch run environment=Development  # start development server
 ```
 
 ## Copyright

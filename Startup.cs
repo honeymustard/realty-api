@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -18,19 +19,12 @@ namespace Honeymustard
     public class Startup
     {
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment Environment { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
-            Configuration = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json",
-                    optional: false,
-                    reloadOnChange: true)
-                .AddJsonFile("secrets.json",
-                    optional: false,
-                    reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
+            Configuration = configuration;
+            Environment = environment;
         }
 
         // This method gets called by the runtime.
@@ -48,6 +42,16 @@ namespace Honeymustard
             services.AddSingleton<IEnvironment, Environment>();
             services.AddSingleton<IUtilities, Utilitis>();
             services.AddSingleton<IBrowser, Browser>();
+
+            services.AddAuthorization(options =>
+            {
+                if (Environment.IsDevelopment())
+                {
+                    options.DefaultPolicy = new AuthorizationPolicyBuilder()
+                        .RequireAssertion(_ => true)
+                        .Build();
+                }
+            });
 
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
