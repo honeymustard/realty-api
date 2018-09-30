@@ -16,6 +16,43 @@ dotnet publish -c Release                 # production build
 dotnet watch run environment=Development  # start development server
 ```
 
+## Usage
+Connect to the API with a JavaScript client.
+
+```javascript
+fetch('http://localhost:5000/api/auth/token', {
+  method: 'POST',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({
+    username: 'the-username',
+    password: 'the-password',
+  }),
+})
+.then(response => response.json())
+.then(result => result.token)
+.then(token => {
+  // use this token to access secure routes
+});
+```
+
+Use the access token to make requests to the API.
+```javascript
+fetch('http://localhost:5000/api/realty/parse/today', {
+  method: 'GET',
+  headers: {
+    'Accept': 'application/json',
+    'Authorization' : `Bearer ${token}`,
+  },
+})
+.then(response => response.json())
+.then(response => {
+  // do something with response..
+});
+```
+
 ## Copyright
 
 Copyright © 2018 Adrian Solumsmo
