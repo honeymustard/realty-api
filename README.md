@@ -32,7 +32,7 @@ fetch('http://localhost:5000/api/auth/token', {
   }),
 })
 .then(response => response.json())
-.then(result => result.token)
+.then(response => response.token)
 .then(token => {
   // use this token to access secure routes
 });
@@ -49,7 +49,7 @@ fetch('http://localhost:5000/api/realty/parse/today', {
 })
 .then(response => response.json())
 .then(response => {
-  // do something with response..
+  // do something with the response..
 });
 ```
 
