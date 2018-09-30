@@ -5,7 +5,7 @@ namespace Honeymustard
         /// <summary>
         /// Attempts to parse a model from a given text.
         /// </summary>
-        /// <param name="blob">A blob of text</param>
-        E Parse(string blob);
+        /// <param name="chunk">A chunk of text</param>
+        E Parse(string chunk);
     }
 }
