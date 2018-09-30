@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using AutoMapper;
+using MongoDB.Driver;
 
 namespace Honeymustard
 {
@@ -40,13 +41,13 @@ namespace Honeymustard
         {
             var secrets = Configuration.GetSection("Secrets").Get<Secrets>();
             var tokens = Configuration.GetSection("Tokens").Get<Tokens>();
-            var userDB = new Database(Configuration.GetSection("UserDB").Get<Credentials>());
-            var realtyDB = new Database(Configuration.GetSection("RealtyDB").Get<Credentials>());
+            var database = new Database(Configuration.GetSection("Database").Get<Credentials>());
 
             services.AddSingleton<Secrets>(secrets);
             services.AddSingleton<Tokens>(tokens);
-            services.AddSingleton<IRepository<UserDocument>>(new UserRepository(userDB));
-            services.AddSingleton<IRepository<RealtyDocument>>(new RealtyRepository(realtyDB));
+            services.AddSingleton<IDatabase<IMongoDatabase>>(database);
+            services.AddSingleton<IRepository<UserDocument>, UserRepository>();
+            services.AddSingleton<IRepository<RealtyDocument>, RealtyRepository>();
             services.AddSingleton<IEnvironment, Environment>();
             services.AddSingleton<IUtilities, Utilitis>();
             services.AddSingleton<IBrowser, Browser>();
