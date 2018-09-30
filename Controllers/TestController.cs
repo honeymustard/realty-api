@@ -15,13 +15,13 @@ namespace Honeymustard
         protected IEnvironment Environment;
         protected IUtilities Utilities;
         protected IBrowser Browser;
-        protected IRepository<RealtyDocument> Repository;
+        protected IRealtyRepository Repository;
 
         public TestController(
             IEnvironment environment,
             IUtilities utilities,
             IBrowser browser,
-            IRepository<RealtyDocument> repository)
+            IRealtyRepository repository)
         {
             Environment = environment;
             Utilities = utilities;

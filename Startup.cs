@@ -44,8 +44,8 @@ namespace Honeymustard
 
             services.AddSingleton<Tokens>(tokens);
             services.AddSingleton<IDatabase<IMongoDatabase>>(database);
-            services.AddSingleton<IRepository<UserDocument>, UserRepository>();
-            services.AddSingleton<IRepository<RealtyDocument>, RealtyRepository>();
+            services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddSingleton<IRealtyRepository, RealtyRepository>();
             services.AddSingleton<IEnvironment, Environment>();
             services.AddSingleton<IUtilities, Utilitis>();
             services.AddSingleton<IBrowser, Browser>();

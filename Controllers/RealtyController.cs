@@ -17,13 +17,13 @@ namespace Honeymustard.Controllers
         protected IEnvironment Environment;
         protected IMemoryCache Cache;
         protected IBrowser Browser;
-        protected IRepository<RealtyDocument> Repository;
+        protected IRealtyRepository Repository;
 
         public RealtyController(
             IEnvironment environment,
             IMemoryCache cache,
             IBrowser browser,
-            IRepository<RealtyDocument> repository
+            IRealtyRepository repository
         )
         {
             Environment = environment;

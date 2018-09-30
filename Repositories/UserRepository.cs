@@ -5,7 +5,7 @@ using MongoDB.Bson;
 
 namespace Honeymustard
 {
-    public class UserRepository : IRepository<UserDocument>
+    public class UserRepository : IUserRepository
     {
         protected IMongoDatabase Db { get; set; }
         protected IMongoCollection<UserDocument> Collection { get; set; }

@@ -13,11 +13,11 @@ namespace Honeymustard
     [Route("api/[controller]")]
     public class AuthController : Controller
     {
-        protected IRepository<UserDocument> Repository;
+        protected IUserRepository Repository;
         protected Tokens Tokens;
         protected ICredentials Credentials;
 
-        public AuthController(IRepository<UserDocument> repository, Tokens tokens, ICredentials credentials)
+        public AuthController(IUserRepository repository, Tokens tokens, ICredentials credentials)
         {
             Repository = repository;
             Tokens = tokens;
