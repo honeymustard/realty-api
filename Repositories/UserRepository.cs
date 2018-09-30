@@ -10,7 +10,7 @@ namespace Honeymustard
         protected IMongoDatabase Db { get; set; }
         protected IMongoCollection<UserDocument> Collection { get; set; }
 
-        public UserRepository(IDatabase<IMongoDatabase> database)
+        public UserRepository(IDatabase database)
         {
             Db = database.GetDatabase();
             Collection = Db.GetCollection<UserDocument>("users");

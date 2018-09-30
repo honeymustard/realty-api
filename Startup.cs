@@ -43,7 +43,7 @@ namespace Honeymustard
             var database = new Database(Configuration.GetSection("Credentials").Get<Credentials>());
 
             services.AddSingleton<Tokens>(tokens);
-            services.AddSingleton<IDatabase<IMongoDatabase>>(database);
+            services.AddSingleton<IDatabase>(database);
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IRealtyRepository, RealtyRepository>();
             services.AddSingleton<IEnvironment, Environment>();

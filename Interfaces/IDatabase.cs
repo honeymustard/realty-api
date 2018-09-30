@@ -2,11 +2,11 @@ using MongoDB.Driver;
 
 namespace Honeymustard
 {
-    public interface IDatabase<T> {
+    public interface IDatabase {
 
         /// <summary>
         /// Gets the database object.
         /// </summary>
-        T GetDatabase();
+        IMongoDatabase GetDatabase();
     }
 }
