@@ -25,9 +25,17 @@ namespace Honeymustard
         {
             Configuration = configuration;
             Environment = environment;
+
+            Mapper.Initialize(config =>
+            {
+                config.CreateMap<UserModel, UserDocument>();
+                config.CreateMap<RealtyModel, RealtyDocument>();
+            });
         }
 
-        // This method gets called by the runtime.
+        /// <summary>
+        /// Adds services to the service container.
+        /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
             var secrets = Configuration.GetSection("Secrets").Get<Secrets>();
@@ -43,6 +51,7 @@ namespace Honeymustard
             services.AddSingleton<IUtilities, Utilitis>();
             services.AddSingleton<IBrowser, Browser>();
 
+            // Disables authorization for development
             services.AddAuthorization(options =>
             {
                 if (Environment.IsDevelopment())
@@ -53,35 +62,24 @@ namespace Honeymustard
                 }
             });
 
+            // Enables authentication with Json Web tokens
             services.AddAuthentication(options => {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options => {
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateLifetime = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = false,
-                    ValidIssuer = tokens.Issuer,
-                    IssuerSigningKey = tokens.SigningKey,
-                };
+                options.TokenValidationParameters = tokens.GetValidationParameters();
             });
 
             services.AddMemoryCache();
             services.AddMvc();
         }
 
-        // This method gets called by the runtime.
+        /// <summary>
+        /// Configures the HTTP request pipeline.
+        /// </summary>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            Mapper.Initialize(config =>
-            {
-                config.CreateMap<UserModel, UserDocument>();
-                config.CreateMap<RealtyModel, RealtyDocument>();
-            });
-
             app.UseCors(policy => policy
                 .AllowAnyOrigin()
                 .AllowAnyMethod()

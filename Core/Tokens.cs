@@ -31,6 +31,19 @@ namespace Honeymustard
             get => new JwtSecurityTokenHandler().WriteToken(GenerateToken());
         }
 
+        public TokenValidationParameters GetValidationParameters()
+        {
+            return new TokenValidationParameters()
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ValidateIssuer = true,
+                ValidateAudience = false,
+                ValidIssuer = Issuer,
+                IssuerSigningKey = SigningKey,
+            };
+        }
+
         public JwtSecurityToken GenerateToken()
         {
             return new JwtSecurityToken(
