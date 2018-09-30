@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using MongoDB.Driver;
 
 namespace Honeymustard
 {
@@ -14,13 +15,13 @@ namespace Honeymustard
     {
         protected IRepository<UserDocument> Repository;
         protected Tokens Tokens;
-        protected Secrets Secrets;
+        protected ICredentials Credentials;
 
-        public AuthController(IRepository<UserDocument> repository, Tokens tokens, Secrets secrets)
+        public AuthController(IRepository<UserDocument> repository, Tokens tokens, ICredentials credentials)
         {
             Repository = repository;
             Tokens = tokens;
-            Secrets = secrets;
+            Credentials = credentials;
         }
 
         [AllowAnonymous]
@@ -32,7 +33,7 @@ namespace Honeymustard
             }
 
             var document = AutoMapper.Mapper.Map<UserDocument>(user);
-            document.Password = Hashing.GenerateHash(document.Password, Secrets.Salt);
+            document.Password = Hashing.GenerateHash(document.Password, Credentials.UserSalt);
 
             var matches = Repository.FindAny(UserRepository.FilterMatch(document));
 

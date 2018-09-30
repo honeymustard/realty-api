@@ -4,5 +4,6 @@ namespace Honeymustard
     {
         public string Database { get; set; }
         public string Connection { get; set; }
+        public string UserSalt { get; set; }
     }
 }
