@@ -40,9 +40,11 @@ namespace Honeymustard
         public void ConfigureServices(IServiceCollection services)
         {
             var tokens = Configuration.GetSection("Tokens").Get<Tokens>();
-            var database = new Database(Configuration.GetSection("Credentials").Get<Credentials>());
+            var credentials = Configuration.GetSection("Credentials").Get<Credentials>();
+            var database = new Database(credentials);
 
             services.AddSingleton<Tokens>(tokens);
+            services.AddSingleton<ICredentials>(credentials);
             services.AddSingleton<IDatabase>(database);
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IRealtyRepository, RealtyRepository>();
