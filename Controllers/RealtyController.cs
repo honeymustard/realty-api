@@ -50,7 +50,7 @@ namespace Honeymustard.Controllers
                 .Where(e => !new Regex(@"id=""promoted-[0-9]{3,16}""").Match(e).Success);
             var models = chunks.Select(e => new RealtyParser().Parse(e));
             var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
-            var todays = Repository.FindAny(RealtyRepository.FilterToday);
+            var todays = Repository.FindAny(RealtyRepository.FilterToday).ToList();
             var newRealties = documents.Where(e => !todays.Any(item => item.RealtyId == e.RealtyId));
             var duplicates = documents.Where(e => todays.Any(item => item.RealtyId == e.RealtyId));
 
