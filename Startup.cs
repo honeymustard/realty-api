@@ -21,11 +21,15 @@ namespace Honeymustard
     {
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
+        public Tokens Tokens { get; set; }
+        public ICredentials Credentials { get; set; }
 
         public Startup(IConfiguration configuration, IHostingEnvironment environment)
         {
             Configuration = configuration;
             Environment = environment;
+            Tokens = Configuration.GetSection("Tokens").Get<Tokens>();
+            Credentials = Configuration.GetSection("Credentials").Get<Credentials>();
 
             Mapper.Initialize(config =>
             {
@@ -39,13 +43,9 @@ namespace Honeymustard
         /// </summary>
         public void ConfigureServices(IServiceCollection services)
         {
-            var tokens = Configuration.GetSection("Tokens").Get<Tokens>();
-            var credentials = Configuration.GetSection("Credentials").Get<Credentials>();
-            var database = new Database(credentials);
-
-            services.AddSingleton<Tokens>(tokens);
-            services.AddSingleton<ICredentials>(credentials);
-            services.AddSingleton<IDatabase>(database);
+            services.AddSingleton<Tokens>(Tokens);
+            services.AddSingleton<ICredentials>(Credentials);
+            services.AddSingleton<IDatabase, Database>();
             services.AddSingleton<IUserRepository, UserRepository>();
             services.AddSingleton<IRealtyRepository, RealtyRepository>();
             services.AddSingleton<IEnvironment, Environment>();
@@ -69,7 +69,7 @@ namespace Honeymustard
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
             .AddJwtBearer(options => {
-                options.TokenValidationParameters = tokens.GetValidationParameters();
+                options.TokenValidationParameters = Tokens.GetValidationParameters();
             });
 
             services.AddMemoryCache();
