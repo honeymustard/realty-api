@@ -10,7 +10,8 @@ namespace Honeymustard
         protected IMongoDatabase Db { get; set; }
         protected IMongoCollection<RealtyDocument> Collection { get; set; }
 
-        public static FilterDefinition<RealtyDocument> FilterToday {
+        public static FilterDefinition<RealtyDocument> FilterToday
+        {
             get => Builders<RealtyDocument>.Filter.Gte("Added", DateTime.Now.Date);
         }
 

@@ -46,11 +46,11 @@ namespace Honeymustard
             services.AddSingleton<Tokens>(Tokens);
             services.AddSingleton<ICredentials>(Credentials);
             services.AddSingleton<IDatabase, Database>();
-            services.AddSingleton<IUserRepository, UserRepository>();
-            services.AddSingleton<IRealtyRepository, RealtyRepository>();
             services.AddSingleton<IEnvironment, Environment>();
             services.AddSingleton<IUtilities, Utilitis>();
             services.AddSingleton<IBrowser, Browser>();
+            services.AddTransient<IUserRepository, UserRepository>();
+            services.AddTransient<IRealtyRepository, RealtyRepository>();
 
             // Disables authorization for development
             services.AddAuthorization(options =>
