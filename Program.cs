@@ -33,6 +33,11 @@ namespace Honeymustard
 
             new WebHostBuilder()
                 .UseConfiguration(configuration)
+                .ConfigureLogging((hosting, logging) =>
+                {
+                    logging.AddConfiguration(hosting.Configuration.GetSection("Logging"));
+                    logging.AddConsole();
+                })
                 .UseKestrel()
                 .UseStartup<Startup>()
                 .Build()

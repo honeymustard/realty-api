@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Logging;
 
 namespace Honeymustard
 {
@@ -16,17 +17,20 @@ namespace Honeymustard
         protected IUtilities Utilities;
         protected IBrowser Browser;
         protected IRealtyRepository Repository;
+        protected ILogger Logger;
 
         public TestController(
             IEnvironment environment,
             IUtilities utilities,
             IBrowser browser,
-            IRealtyRepository repository)
+            IRealtyRepository repository,
+            ILogger<TestController> logger)
         {
             Environment = environment;
             Utilities = utilities;
             Browser = browser;
             Repository = repository;
+            Logger = logger;
         }
 
         [Authorize]
