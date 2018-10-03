@@ -3,7 +3,7 @@
 A private web service that can index publicly listed realties.  
 
 ## Instructions
-A sample of the hidden settings can be found in **secrets.fake.json**.  
+A sample of the hidden settings can be found in [secrets.fake.json](secrets.fake.json).  
 
 ```
 dotnet publish -c Release                 # production build
@@ -53,13 +53,13 @@ fetch('http://localhost:5000/api/realty/parse/today', {
 ## Output
 The result is a list of new realties per day.
 
-```json
+```javascript
 // http://localhost:5000/api/realty/datum
 [
   { "date": "2018-10-01T00:00:00", "value": 177 },
   { "date": "2018-10-02T00:00:00", "value": 211 },
   { "date": "2018-10-01T00:00:00", "value": 164 },
-  { "date": "2018-10-03T00:00:00", "value": 102 }
+  { "date": "2018-10-03T00:00:00", "value": 102 },
 ]
 ```
 
