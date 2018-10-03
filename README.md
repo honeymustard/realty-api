@@ -2,12 +2,6 @@
 
 A private web service that can index publicly listed realties.  
 
-The consumer is responsible for all scheduling i.e. calling the  
-appropriate routes in a regular fashion.  
-
-The API uses bearer authentication and requires the consumer to  
-have a valid user in the users collection.  
-
 ## Instructions
 A sample of the hidden settings can be found in **secrets.fake.json**.  
 
@@ -17,7 +11,10 @@ dotnet watch run environment=Development  # start development server
 ```
 
 ## Usage
-Connect to the API with a JavaScript client.
+The API uses bearer authentication with Json web tokens and requires the  
+consumer to have a valid user in the users collection.  
+
+Connecting to the API with a JavaScript client.
 
 ```javascript
 fetch('http://localhost:5000/api/auth/token', {
@@ -34,11 +31,11 @@ fetch('http://localhost:5000/api/auth/token', {
 .then(response => response.json())
 .then(response => response.token)
 .then(token => {
-  // use this token to access secure routes
+  // Use this token to make requests to the API.
 });
 ```
 
-Use the access token to make requests to the API.
+The consumer is responsible for the scheduling by calling the parse route.  
 ```javascript
 fetch('http://localhost:5000/api/realty/parse/today', {
   method: 'GET',
@@ -49,8 +46,21 @@ fetch('http://localhost:5000/api/realty/parse/today', {
 })
 .then(response => response.json())
 .then(response => {
-  // do something with the response..
+  // The server will save new realties and report a status
 });
+```
+
+## Output
+The result is a list of new realties per day.
+
+```json
+// http://localhost:5000/api/realty/datum
+[
+  { "date": "2018-10-01T00:00:00", "value": 177 },
+  { "date": "2018-10-02T00:00:00", "value": 211 },
+  { "date": "2018-10-01T00:00:00", "value": 164 },
+  { "date": "2018-10-03T00:00:00", "value": 102 }
+]
 ```
 
 ## Copyright
