@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Logging;
 
 namespace Honeymustard.Controllers
 {
@@ -18,18 +19,21 @@ namespace Honeymustard.Controllers
         protected IMemoryCache Cache;
         protected IBrowser Browser;
         protected IRealtyRepository Repository;
+        protected ILogger<RealtyController> Logger;
 
         public RealtyController(
             IEnvironment environment,
             IMemoryCache cache,
             IBrowser browser,
-            IRealtyRepository repository
+            IRealtyRepository repository,
+            ILogger<RealtyController> logger
         )
         {
             Environment = environment;
             Cache = cache;
             Browser = browser;
             Repository = repository;
+            Logger = logger;
         }
 
         [HttpGet("parse/today")]
@@ -48,7 +52,23 @@ namespace Honeymustard.Controllers
 
             var chunks = parser.Chunk(partitions)
                 .Where(e => !new Regex(@"id=""promoted-[0-9]{3,16}""").Match(e).Success);
-            var models = chunks.Select(e => new RealtyParser().Parse(e));
+
+            var models = chunks.Aggregate(new List<RealtyModel>(), (accumulator, chunk) => {
+                var realty = new RealtyParser().Parse(chunk);
+
+                if (TryValidateModel(realty))
+                {
+                    accumulator.Add(realty);
+                }
+                else
+                {
+                    Logger.LogError("Realty did not pass validation");
+                    Logger.LogError(chunk);
+                }
+
+                return accumulator;
+            });
+
             var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
             var todays = Repository.FindAny(RealtyRepository.FilterToday).ToList();
             var newRealties = documents.Where(e => !todays.Any(item => item.RealtyId == e.RealtyId));

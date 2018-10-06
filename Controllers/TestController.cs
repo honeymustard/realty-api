@@ -74,7 +74,22 @@ namespace Honeymustard
             var chunks = parser.Chunk(partitions)
                 .Where(e => !new Regex(@"id=""promoted-[0-9]{3,16}""").Match(e).Success);
 
-            var models = chunks.Select(e => new RealtyParser().Parse(e));
+            var models = chunks.Aggregate(new List<RealtyModel>(), (accumulator, chunk) => {
+                var realty = new RealtyParser().Parse(chunk);
+
+                if (TryValidateModel(realty))
+                {
+                    accumulator.Add(realty);
+                }
+                else
+                {
+                    Logger.LogError("Realty did not pass validation");
+                    Logger.LogError(chunk);
+                }
+
+                return accumulator;
+            });
+
             var documents = models.Select(e => AutoMapper.Mapper.Map<RealtyDocument>(e));
 
             var todays = Repository.FindAny(RealtyRepository.FilterToday).ToList();
