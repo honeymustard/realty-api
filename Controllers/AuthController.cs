@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Logging;
 using MongoDB.Driver;
 
 namespace Honeymustard
@@ -16,12 +17,19 @@ namespace Honeymustard
         protected IUserRepository Repository;
         protected Tokens Tokens;
         protected ICredentials Credentials;
+        protected ILogger<AuthController> Logger;
 
-        public AuthController(IUserRepository repository, Tokens tokens, ICredentials credentials)
+        public AuthController(
+            IUserRepository repository,
+            Tokens tokens,
+            ICredentials credentials,
+            ILogger<AuthController> logger
+        )
         {
             Repository = repository;
             Tokens = tokens;
             Credentials = credentials;
+            Logger = logger;
         }
 
         [AllowAnonymous]
@@ -29,7 +37,8 @@ namespace Honeymustard
         public IActionResult GetToken([FromBody] UserModel user)
         {
             if (!ModelState.IsValid) {
-                return BadRequest("User model failed to validate");
+                Logger.LogWarning("User model failed to validate");
+                return BadRequest("Authentication failed");
             }
 
             var document = AutoMapper.Mapper.Map<UserDocument>(user);
@@ -45,6 +54,7 @@ namespace Honeymustard
                 });
             }
 
+            Logger.LogWarning($"Authentication failed for user: {user.Username}");
             return BadRequest("Authentication failed");
         }
     }
