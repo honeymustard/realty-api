@@ -97,7 +97,8 @@ namespace Honeymustard.Controllers
             if (!Cache.TryGetValue(key, out datum))
             {
                 var map = new Dictionary<string, Datum>();
-                var filter = MongoDB.Driver.Builders<RealtyDocument>.Filter.Gte("Added", from);
+                var builder = MongoDB.Driver.Builders<RealtyDocument>.Filter;
+                var filter = builder.Gte("Added", from) & builder.Lt("Added", DateTime.Today);
 
                 foreach (var item in Repository.FindAny(filter))
                 {

@@ -12,7 +12,7 @@ namespace Honeymustard
 
         public static FilterDefinition<RealtyDocument> FilterToday
         {
-            get => Builders<RealtyDocument>.Filter.Gte("Added", DateTime.Now.Date);
+            get => Builders<RealtyDocument>.Filter.Gte("Added", DateTime.Today);
         }
 
         public RealtyRepository(IDatabase database)
