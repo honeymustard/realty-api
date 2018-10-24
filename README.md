@@ -1,4 +1,4 @@
-# Realty API
+# Realty API [![Build Status](https://travis-ci.org/honeymustard/realty-api.svg?branch=master)](https://travis-ci.org/honeymustard/realty-api)
 
 A private web service that can index publicly listed realties.  
 
